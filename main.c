@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     
     srand(time(NULL));
     val[5] = '\0';
-    for(i = 0; i < 8; i++) {
+    for(i = 0; i < 10; i++) {
         for(j = 0; j < 5; j++) {
             c = (rand() % 26) + 97;
             val[j] = (char) c;
@@ -35,5 +35,6 @@ int main(int argc, char** argv) {
         set_add(test1, val);
     }
     set_print(test1);
+    printf("\n");
     return 0;
 }

@@ -19,7 +19,7 @@ struct Set {
     struct Set_Entry **data;
     int num_elements;
     float load_factor;
-    float capacity;
+    int capacity;
 };
 
 struct Set *set_create(int capacity, float loadFactor) {
@@ -39,7 +39,6 @@ struct Set *set_create(int capacity, float loadFactor) {
     }
     
     ret->num_elements = 0;
-    
     return ret;
 }
 
@@ -207,4 +206,5 @@ void set_print(struct Set *set) {
         }
     }
     printf("}\n");
+    printf("num_elements = %d, capacity = %d, load_factor=%f.\n", set->num_elements, set->capacity, set->load_factor);
 }
