@@ -15,11 +15,6 @@
 #define SET_H
 
 /**
- * defines a structure for an entry into the set.
- */
-struct Set_Entry;
-
-/**
  * A set which holds all of our data;
  */
 struct Set;

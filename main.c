@@ -14,17 +14,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "set.h"
 
 /*
  * 
  */
 int main(int argc, char** argv) {
+    char val[6];
+    int i, j, c;
     struct Set *test1 = set_create(5, 0.75);
-    char val1[6];
-    strcpy(val1, "hello");
-    set_add(test1, val1);
-    set_remove(test1, val1);
+    
+    srand(time(NULL));
+    val[5] = '\0';
+    for(i = 0; i < 8; i++) {
+        for(j = 0; j < 5; j++) {
+            c = (rand() % 26) + 97;
+            val[j] = (char) c;
+        }
+        set_add(test1, val);
+    }
     set_print(test1);
     return 0;
 }
