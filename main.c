@@ -21,13 +21,14 @@
  * 
  */
 int main(int argc, char** argv) {
+    
     char val[6];
     int i, j, c;
     struct Set *test1 = set_create(5, 0.75);
     
     srand(time(NULL));
     val[5] = '\0';
-    for(i = 0; i < 10; i++) {
+    for(i = 0; i < 300; i++) {
         for(j = 0; j < 5; j++) {
             c = (rand() % 26) + 97;
             val[j] = (char) c;
@@ -36,5 +37,6 @@ int main(int argc, char** argv) {
     }
     set_print(test1);
     printf("\n");
+    
     return 0;
 }

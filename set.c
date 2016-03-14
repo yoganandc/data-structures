@@ -74,13 +74,8 @@ void set_add(struct Set *set, char *val) {
     
     /* If load is greater than loadFactor, we need to rehash the table */
     if(load >= set->load_factor) {
-        int i;
-        struct Set *new_set = (struct Set *) calloc(sizeof(struct Set), 1);
-        
-        new_set->capacity = set->capacity * 2;
-        new_set->num_elements = 0;
-        new_set->load_factor = set->load_factor;
-        new_set->data = (struct Set_Entry **) calloc(sizeof(struct Set_Entry *), new_set->capacity);
+        int i; 
+        struct Set *new_set = set_create(set->capacity * 2, set->load_factor);
         
         for(i = 0; i < set->capacity; i++) {
             if(set->data[i] != NULL) {
@@ -113,11 +108,19 @@ void set_add(struct Set *set, char *val) {
             
         /* Bucket is not empty */    
         } else {
+            int i;
             int bucket_size = 1;
+            struct Set_Entry *old;
+            
             while(set->data[val_hash][bucket_size - 1].val != NULL) {
                 bucket_size++;
             }
-            set->data[val_hash] = (struct Set_Entry *) realloc(set->data[val_hash], bucket_size + 1);
+            old = set->data[val_hash];
+            set->data[val_hash] = (struct Set_Entry *) calloc(sizeof(struct Set_Entry), bucket_size + 1);
+            for(i = 0; i < bucket_size - 1; i++) {
+                set->data[val_hash][i].val = old[i].val;
+            }
+            free(old);
             set->data[val_hash][bucket_size - 1].val = (char *) calloc(sizeof(char), strlen(val) + 1);
             strcpy(set->data[val_hash][bucket_size - 1].val, val);
             set->data[val_hash][bucket_size].val = NULL;
@@ -169,16 +172,19 @@ void set_remove(struct Set *set, char *val) {
             
         /* BUCKET SIZE GREATER THAN TWO */    
         } else {
-            int index = 0;
-            int i;
-            while(!strcmp(set->data[val_hash][index].val, val)) {
-                index++;
+            int i, j = 0;
+            struct Set_Entry *old = set->data[val_hash];
+            
+            set->data[val_hash] = (struct Set_Entry *) calloc(sizeof(struct Set_Entry), bucket_size - 1);
+            for(i = 0; i < bucket_size; i++) {
+                if(!strcmp(old[i].val, val)) {
+                    free(old[i].val);
+                } else {
+                    set->data[val_hash][j].val = old[i].val;
+                    j++;
+                }
             }
-            free(set->data[val_hash][index].val);
-            for(i = index; i < bucket_size - 2; i++) {
-                set->data[val_hash][i] = set->data[val_hash][i + 1];
-            }
-            set->data[val_hash] = (struct Set_Entry *) realloc(set->data[val_hash], bucket_size - 1);
+            free(old);
         }
     }
 }
@@ -189,7 +195,7 @@ int set_size(struct Set *set) {
 
 void set_print(struct Set *set) {
     int i;
-    int k = 0;
+    int k = 1;
     printf("{ ");
     for(i = 0; i < set->capacity; i++) {
         if(set->data[i] != NULL) {
