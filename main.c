@@ -23,6 +23,7 @@
 int main(int argc, char** argv) {
     
     char val[6];
+    char val2[300][6];
     int i, j, c;
     struct Set *test1 = set_create(5, 0.75);
     
@@ -32,11 +33,19 @@ int main(int argc, char** argv) {
         for(j = 0; j < 5; j++) {
             c = (rand() % 26) + 97;
             val[j] = (char) c;
+            val2[i][j] = c;
         }
         set_add(test1, val);
+        val2[i][5] = '\0';
     }
     set_print(test1);
     printf("\n");
+   
+    set_remove(test1, val2[0]);
+    set_print(test1);
+    
+    set_remove(test1, val2[1]);
+    set_print(test1);
     
     return 0;
 }

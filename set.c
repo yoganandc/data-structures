@@ -176,7 +176,7 @@ void set_remove(struct Set *set, char *val) {
             struct Set_Entry *old = set->data[val_hash];
             
             set->data[val_hash] = (struct Set_Entry *) calloc(sizeof(struct Set_Entry), bucket_size - 1);
-            for(i = 0; i < bucket_size; i++) {
+            for(i = 0; i < bucket_size - 1; i++) {
                 if(!strcmp(old[i].val, val)) {
                     free(old[i].val);
                 } else {
@@ -184,8 +184,10 @@ void set_remove(struct Set *set, char *val) {
                     j++;
                 }
             }
+            set->data[val_hash][bucket_size - 2].val = NULL;
             free(old);
         }
+        set->num_elements--;
     }
 }
 
